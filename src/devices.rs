@@ -1,3 +1,4 @@
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct SmartSocket {
     pub name: String,
@@ -14,11 +15,10 @@ impl SmartSocket {
         }
     }
 }
-
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct SmartThermometer {
     pub name: String,
-    #[warn(dead_code)]
     status: bool,
     temperature: f32,
 }
