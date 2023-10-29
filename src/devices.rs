@@ -60,6 +60,6 @@ mod tests {
     #[test]
     fn default_thermo() {
         let thermo = Device::SmartThermometr(SmartThermometer::default("Smart thermometr".to_string()));
-
+        assert_eq!(thermo.device_name().is_some(), true);
     }
 }
