@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 
+use crate::devices;
 use crate::devices::*;
 use crate::smartroom::*;
 pub struct SmartHouse {
@@ -16,7 +17,7 @@ impl SmartHouse {
                     smart_rooms: HashMap::new(),
                 })
             },
-            _ => Err("invalid room name"),
+            _ => Err("invalid house name"),
         }
     }
 
@@ -25,6 +26,16 @@ impl SmartHouse {
     pub fn get_rooms(&self) -> Vec<&SmartRoom> {
         self.smart_rooms.values().collect()
 
+    }
+
+    pub fn device_info(&self, room: String) -> Option<Vec<&Device>> {
+            match self.smart_rooms.get(&room) {
+                Some(room) => {
+                    let device_info = room.smart_device.values().collect();
+                    Some(device_info)
+                }
+                None => None
+            }
     }
 
 
@@ -46,7 +57,7 @@ impl SmartHouse {
 }
 
 pub trait DeviceInfoProvider {
-    fn device_info(&self, room: String) -> String;
+    fn device_info(&self, room: &SmartRoom, devices: Device) -> String;
 }
 
 
@@ -54,22 +65,31 @@ pub trait DeviceInfoProvider {
 pub struct OwningDeviceInfoProvider {
     pub socket: SmartSocket,
 }
+#[derive(Debug)]
 pub struct BorrowingDeviceInfoProvider<'a, 'b> {
     pub socket: &'a SmartSocket,
     pub thermo: &'b SmartThermometer,
 }
 
 impl DeviceInfoProvider for OwningDeviceInfoProvider {
-    fn device_info(&self, room: String) -> String {
-        format!("{} contains: {} {}", room, room, &self.socket.name)
+    fn device_info(&self, room: &SmartRoom, devices: Device) -> String {
+        let mut device_info = format!("{}", room.room_name);
+        match devices {
+            Device::SmartSocket(soket)=> device_info.push_str(format!("{}", soket).as_str()),
+            Device::SmartThermometr(thermo) => device_info.push_str(format!("{}", thermo).as_str())
+        }
+        return device_info
+
     }
 }
 impl<'a, 'b> DeviceInfoProvider for BorrowingDeviceInfoProvider<'a, 'b> {
-    fn device_info(&self, room: String) -> String {
-        format!(
-            "{} contains : {} {} and {} {}",
-            room, room, &self.socket.name, room, &self.thermo.name
-        )
+    fn device_info(&self, room: &SmartRoom, devices: Device) -> String {
+        let mut device_info = format!("{}", room.room_name);
+        match devices {
+            Device::SmartSocket(soket)=> device_info.push_str(format!("{}", soket).as_str()),
+            Device::SmartThermometr(thermo) => device_info.push_str(format!("{}", thermo).as_str())
+        }
+        return device_info
     }
 }
 

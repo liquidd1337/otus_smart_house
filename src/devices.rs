@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 pub enum Device {
     SmartSocket(SmartSocket),
     SmartThermometr(SmartThermometer),
@@ -11,6 +13,8 @@ impl Device {
         }
     }
 }
+
+
 
 #[allow(dead_code)]
 #[derive(Debug, Clone)]
@@ -29,6 +33,11 @@ impl SmartSocket {
         }
     }
 }
+impl Display for SmartSocket {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "SmartSocket name: {}, status: {}, voltage: {}", self.name, self.status, self.voltage)
+    }
+}
 #[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct SmartThermometer {
@@ -44,6 +53,12 @@ impl SmartThermometer {
             status: false,
             temperature: 0.0,
         }
+    }
+}
+
+impl Display for SmartThermometer {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "SmartThermo name: {}, status: {}, temperature: {}", self.name, self.status, self.temperature)
     }
 }
 
