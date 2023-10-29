@@ -4,9 +4,9 @@ use smarthouse::devices::*;
 
 fn main() {
     // Инициализация устройств
-        let socket = SmartSocket::default("Smart_socket".to_string());
-        let socket_borrow = SmartSocket::default("Smart_socket".to_string());
-        let thermo = SmartThermometer::default("Smart_thetmometr".to_string());
+    let socket = SmartSocket::default("Smart_socket".to_string());
+    let socket_borrow = SmartSocket::default("Smart_socket".to_string());
+    let thermo = SmartThermometer::default("Smart_thetmometr".to_string());
     //Инициализация комнат
     let kitchen = SmartRoom::default("kitchen".to_string(), socket.clone(), thermo.clone());
     let hall = SmartRoom::default("hall".to_string(), socket.clone(), thermo.clone());

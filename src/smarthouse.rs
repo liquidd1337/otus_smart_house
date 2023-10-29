@@ -1,35 +1,29 @@
+use std::collections::HashMap;
+
 use crate::devices::*;
 use crate::smartroom::*;
 pub struct SmartHouse {
     house_name: String,
-    smart_kitchen: SmartRoom,
-    smart_hall: SmartRoom,
-    smart_living_room: SmartRoom,
-    smart_bathroom: SmartRoom,
+    smart_rooms: HashMap<String, SmartRoom>,
 }
 
 impl SmartHouse {
-    pub fn new(house_name: String,smart_kitchen: SmartRoom,
-        smart_hall: SmartRoom ,
-        smart_living_room: SmartRoom,
-        smart_bathroom: SmartRoom,) -> Self {
-        Self {
-            house_name,
-            smart_kitchen,
-            smart_hall,
-            smart_living_room,
-            smart_bathroom,
+    pub fn new(house_name: String) -> Result<SmartHouse, &'static str> {
+        match house_name {
+            ref String => {
+                 Ok (SmartHouse {
+                    house_name,
+                    smart_rooms: HashMap::new(),
+                })
+            },
+            _ => Err("invalid room name"),
         }
     }
 
-    pub fn get_rooms(&self) -> Vec<String> {
-        let rooms_list = vec![
-            self.smart_kitchen.room_name.clone(),
-            self.smart_hall.room_name.clone(),
-            self.smart_living_room.room_name.clone(),
-            self.smart_bathroom.room_name.clone(),
-        ];
-        rooms_list
+
+
+    pub fn get_rooms(&self) -> Vec<&SmartRoom> {
+        self.smart_rooms.values().collect()
 
     }
 

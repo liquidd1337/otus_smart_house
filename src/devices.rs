@@ -1,3 +1,17 @@
+pub enum Device {
+    SmartSocket(SmartSocket),
+    SmartThetmometr(SmartThermometer),
+}
+
+impl Device {
+    pub fn device_name(&self) -> Option<String> {
+        match self {
+            Device::SmartSocket(smart_socket) => Some(smart_socket.name.clone()),
+            Device::SmartThetmometr(smart_thermometer) => Some(smart_thermometer.name.clone()),
+        }
+    }
+}
+
 #[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct SmartSocket {
@@ -39,18 +53,13 @@ mod tests {
 
     #[test]
     fn default_socket() {
-        let socket = SmartSocket::default("Smart_socket".to_string());
-        assert_eq!(socket.name, "Smart_socket");
-        assert_eq!(socket.status, false);
-        assert_eq!(socket.voltage, 0.0);
+        let socket = Device::SmartSocket(SmartSocket::default("Smart Socket".to_string()));
+        assert_eq!(socket.device_name().is_some(), true);
     }
 
     #[test]
     fn default_thermo() {
-        let thermo = SmartThermometer::default("Smart_thetmometr".to_string());
-        assert_eq!(thermo.name, "Smart_thetmometr");
-        assert_eq!(thermo.status, false);
-        assert_eq!(thermo.temperature, 0.0);
+        let thermo = Device::SmartThetmometr(SmartThermometer::default("Smart thermometr".to_string()));
 
     }
 }

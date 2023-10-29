@@ -1,16 +1,21 @@
+use std::collections::HashMap;
 use crate::devices::*;
+
 pub struct SmartRoom {
     pub room_name: String,
-    pub smart_socket: SmartSocket,
-    pub smart_thermometr: SmartThermometer,
+    pub smart_device: HashMap<String, Device>,
 }
 
 impl SmartRoom {
-    pub fn default(room_name: String, smart_socket: SmartSocket, smart_thermometr: SmartThermometer) -> Self {
-        Self {
-            room_name,
-            smart_socket,
-            smart_thermometr,
+    pub fn default(room_name: String) -> Result<SmartRoom, &'static str> {
+        match room_name {
+            ref String => {
+                 Ok (SmartRoom {
+                    room_name,
+                    smart_device: HashMap::new(),
+                })
+            },
+            _ => Err("invalid room name"),
         }
     }
 }
@@ -23,10 +28,10 @@ mod tests {
 
     #[test]
     fn default_room() {
-        let socket = SmartSocket::default("Smart_socket".to_string());
-        let thermo = SmartThermometer::default("Smart_thetmometr".to_string());
-        let smart_room = SmartRoom::default("kitchen".to_string(), socket, thermo);
-        assert_eq!(smart_room.room_name, "kitchen");
+        let smart_room = SmartRoom::default("kitchen".to_string());
+        let smart_thermo = Device::Smart_socket(())
+        smart_room.smart_device.insert(String::from("Kithen"), )
+        assert_eq!(smart_room.is_ok(), true);
     }
 }
 
