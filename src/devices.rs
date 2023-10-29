@@ -1,13 +1,13 @@
 pub enum Device {
     SmartSocket(SmartSocket),
-    SmartThetmometr(SmartThermometer),
+    SmartThermometr(SmartThermometer),
 }
 
 impl Device {
     pub fn device_name(&self) -> Option<String> {
         match self {
             Device::SmartSocket(smart_socket) => Some(smart_socket.name.clone()),
-            Device::SmartThetmometr(smart_thermometer) => Some(smart_thermometer.name.clone()),
+            Device::SmartThermometr(smart_thermometer) => Some(smart_thermometer.name.clone()),
         }
     }
 }
@@ -59,7 +59,7 @@ mod tests {
 
     #[test]
     fn default_thermo() {
-        let thermo = Device::SmartThetmometr(SmartThermometer::default("Smart thermometr".to_string()));
+        let thermo = Device::SmartThermometr(SmartThermometer::default("Smart thermometr".to_string()));
 
     }
 }
