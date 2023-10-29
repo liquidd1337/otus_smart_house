@@ -1,6 +1,6 @@
+use smarthouse::devices::*;
 use smarthouse::smarthouse::*;
 use smarthouse::smartroom::*;
-use smarthouse::devices::*;
 
 fn main() {
     // Инициализация устройств
@@ -16,10 +16,9 @@ fn main() {
     // Инициализация дома
     let house = SmartHouse::new("house".to_string(), kitchen, hall, living, bathroom);
 
-
     // Строим отчёт с использованием `OwningDeviceInfoProvider`.
-    let info_provider_1 = OwningDeviceInfoProvider { socket: socket};
-    
+    let info_provider_1 = OwningDeviceInfoProvider { socket: socket };
+
     let report1 = house.create_report(info_provider_1);
 
     // Строим отчёт с использованием `BorrowingDeviceInfoProvider`.
@@ -27,7 +26,7 @@ fn main() {
         socket: &socket_borrow,
         thermo: &thermo,
     };
-    
+
     let report2 = house.create_report(info_provider_2);
 
     // Выводим отчёты на экран:

@@ -14,14 +14,12 @@ impl Device {
     }
 }
 
-
-
 #[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct SmartSocket {
     pub name: String,
-     status: bool,
-     voltage: f32,
+    status: bool,
+    voltage: f32,
 }
 
 impl SmartSocket {
@@ -35,7 +33,11 @@ impl SmartSocket {
 }
 impl Display for SmartSocket {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "SmartSocket name: {}, status: {}, voltage: {}", self.name, self.status, self.voltage)
+        write!(
+            f,
+            "SmartSocket name: {}, status: {}, voltage: {}",
+            self.name, self.status, self.voltage
+        )
     }
 }
 #[allow(dead_code)]
@@ -47,7 +49,7 @@ pub struct SmartThermometer {
 }
 
 impl SmartThermometer {
-    pub fn default(name : String) -> Self {
+    pub fn default(name: String) -> Self {
         Self {
             name,
             status: false,
@@ -58,7 +60,11 @@ impl SmartThermometer {
 
 impl Display for SmartThermometer {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "SmartThermo name: {}, status: {}, temperature: {}", self.name, self.status, self.temperature)
+        write!(
+            f,
+            "SmartThermo name: {}, status: {}, temperature: {}",
+            self.name, self.status, self.temperature
+        )
     }
 }
 
@@ -74,7 +80,8 @@ mod tests {
 
     #[test]
     fn default_thermo() {
-        let thermo = Device::SmartThermometr(SmartThermometer::default("Smart thermometr".to_string()));
+        let thermo =
+            Device::SmartThermometr(SmartThermometer::default("Smart thermometr".to_string()));
         assert_eq!(thermo.device_name().is_some(), true);
     }
 }

@@ -1,5 +1,5 @@
-use std::collections::HashMap;
 use crate::devices::*;
+use std::collections::HashMap;
 
 pub struct SmartRoom {
     pub room_name: String,
@@ -17,7 +17,6 @@ impl SmartRoom {
 
 #[cfg(test)]
 mod tests {
-    
 
     use super::*;
 
@@ -25,8 +24,10 @@ mod tests {
     fn default_room() {
         let mut smart_room = SmartRoom::default("kitchen".to_string());
         let socket = Device::SmartSocket(SmartSocket::default("Smart Socket".to_string()));
-        smart_room.unwrap().smart_device.insert(String::from("Kitchen"), socket );
+        smart_room
+            .unwrap()
+            .smart_device
+            .insert(String::from("Kitchen"), socket);
         assert_eq!(smart_room.is_some(), true);
     }
 }
-
