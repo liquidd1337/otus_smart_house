@@ -1,5 +1,5 @@
 use std::fmt::Display;
-
+#[derive(Debug, Clone)]
 pub enum Device {
     SmartSocket(SmartSocket),
     SmartThermometr(SmartThermometer),

@@ -1,20 +1,25 @@
 use crate::devices::*;
-use std::collections::HashMap;
-
+use std::{collections::HashMap, fmt::Display};
+#[derive(Debug, Clone)]
 pub struct SmartRoom {
     pub room_name: String,
     pub smart_device: HashMap<String, Device>,
 }
 
 impl SmartRoom {
-    pub fn default(room_name: String) -> Option<SmartRoom> {
-        Some(SmartRoom {
-            room_name: String::new(),
+    pub fn default(room_name: String) -> SmartRoom {
+        SmartRoom {
+            room_name,
             smart_device: HashMap::new(),
-        })
+        }
     }
 }
 
+impl Display for SmartRoom {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        writeln!(f, "{}\n", self.room_name)
+    }
+}
 #[cfg(test)]
 mod tests {
 
@@ -25,9 +30,8 @@ mod tests {
         let mut smart_room = SmartRoom::default("kitchen".to_string());
         let socket = Device::SmartSocket(SmartSocket::default("Smart Socket".to_string()));
         smart_room
-            .unwrap()
             .smart_device
-            .insert(String::from("Kitchen"), socket);
-        assert_eq!(smart_room.is_some(), true);
+            .insert(String::from("Kitchen socket"), socket);
+        assert!(!smart_room.smart_device.is_empty());
     }
 }
