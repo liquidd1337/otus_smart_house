@@ -17,7 +17,7 @@ impl SmartRoom {
 
 impl Display for SmartRoom {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        writeln!(f, "{}\n", self.room_name)
+        writeln!(f, "{}", self.room_name)
     }
 }
 #[cfg(test)]

@@ -40,9 +40,9 @@ impl SmartHouse {
         let mut report = String::new();
         report.push_str(&format!("{}", self));
         for smart_rooms in self.get_rooms() {
-            report.push_str(&format!("{}", smart_rooms));
+            report.push_str(&format!("{} contains:\n", smart_rooms));
             for devices in smart_rooms.smart_device.values() {
-                report.push_str(&format!("{}", provider.device_info(smart_rooms, devices)));
+                report.push_str(&format!("{}\n", provider.device_info(smart_rooms, devices)));
             }
         }
         report
@@ -67,8 +67,8 @@ impl DeviceInfoProvider for OwningDeviceInfoProvider {
     fn device_info(&self, room: &SmartRoom, devices: &Device) -> String {
         let mut device_info = format!("{}", room.room_name);
         match devices {
-            Device::SmartSocket(soket) => device_info.push_str(format!("{}\n", soket).as_str()),
-            Device::SmartThermometr(thermo) => device_info.push_str(format!("{}\n", thermo).as_str()),
+            Device::SmartSocket(soket) => device_info.push_str(format!("{}", soket).as_str()),
+            Device::SmartThermometr(thermo) => device_info.push_str(format!("{}", thermo).as_str()),
         }
         device_info
     }
