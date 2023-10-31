@@ -10,7 +10,7 @@ pub struct SmartHouse {
 
 impl Display for SmartHouse {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "House name: {}", &self.house_name)
+        write!(f, "House name: {}\n", &self.house_name)
     }
 }
 
@@ -67,8 +67,8 @@ impl DeviceInfoProvider for OwningDeviceInfoProvider {
     fn device_info(&self, room: &SmartRoom, devices: &Device) -> String {
         let mut device_info = format!("{}", room.room_name);
         match devices {
-            Device::SmartSocket(soket) => device_info.push_str(format!("{}", soket).as_str()),
-            Device::SmartThermometr(thermo) => device_info.push_str(format!("{}", thermo).as_str()),
+            Device::SmartSocket(soket) => device_info.push_str(format!("{}\n", soket).as_str()),
+            Device::SmartThermometr(thermo) => device_info.push_str(format!("{}\n", thermo).as_str()),
         }
         device_info
     }
@@ -77,8 +77,8 @@ impl<'a, 'b> DeviceInfoProvider for BorrowingDeviceInfoProvider<'a, 'b> {
     fn device_info(&self, room: &SmartRoom, devices: &Device) -> String {
         let mut device_info = format!("{}", room.room_name);
         match devices {
-            Device::SmartSocket(soket) => device_info.push_str(format!("{}", soket).as_str()),
-            Device::SmartThermometr(thermo) => device_info.push_str(format!("{}", thermo).as_str()),
+            Device::SmartSocket(soket) => device_info.push_str(format!("{}\n", soket).as_str()),
+            Device::SmartThermometr(thermo) => device_info.push_str(format!("{}\n", thermo).as_str()),
         }
         device_info
     }
@@ -92,7 +92,7 @@ mod tests {
     fn new_house() {
         let socket = SmartSocket::default("Smart_socket".to_string());
         let thermo = SmartThermometer::default("Smart_thetmometr".to_string());
-        let mut kitchen = SmartRoom::default("Kithen".to_string());
+        let mut kitchen = SmartRoom::default("Kitchen".to_string());
         kitchen.smart_device.insert(
             "Kitchen thermo".to_string(),
             Device::SmartThermometr(thermo.clone()),

@@ -5,12 +5,12 @@ use smarthouse::smartroom::*;
 fn main() {
     // Инициализация устройств
     let socket = SmartSocket::default("Smart_socket".to_string());
+    let thermo = SmartThermometer::default("Smart_thetmometr".to_string());
     let socket_borrow = SmartSocket::default("Smart_socket".to_string());
-    let thermo = SmartThermometer::default("Smart_thetmometr".to_string());
+    
     //Инициализация комнат
-    let socket = SmartSocket::default("Smart_socket".to_string());
-    let thermo = SmartThermometer::default("Smart_thetmometr".to_string());
-    let mut kitchen = SmartRoom::default("Kithen".to_string());
+
+    let mut kitchen = SmartRoom::default("Kitchen".to_string());
     kitchen.smart_device.insert(
         "Kitchen thermo".to_string(),
         Device::SmartThermometr(thermo.clone()),
@@ -27,16 +27,20 @@ fn main() {
     );
     let mut living = SmartRoom::default("Living room".to_string());
     living.smart_device.insert(
-        "Bathroom thermo".to_string(),
+        "Living thermo".to_string(),
         Device::SmartThermometr(thermo.clone()),
     );
     living.smart_device.insert(
-        "Bathroom socket".to_string(),
+        "Living socket".to_string(),
         Device::SmartSocket(socket.clone()),
     );
     // Инициализация дома
     let mut house = SmartHouse::new("House".to_string());
-    house.smart_rooms.insert("Kitchen".to_string(), kitchen);
+    house.smart_rooms.insert("Kitchen ".to_string(), kitchen);
+    house.smart_rooms.insert("Hall ".to_string(), hall);
+    house.smart_rooms.insert("Bathroom ".to_string(), bathroom);
+    house.smart_rooms.insert("Livingroom ".to_string(), living);
+    
 
     // Строим отчёт с использованием `OwningDeviceInfoProvider`.
     let info_provider_1 = OwningDeviceInfoProvider { socket: socket };
