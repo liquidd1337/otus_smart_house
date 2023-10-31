@@ -43,7 +43,7 @@ fn main() {
     
 
     // Строим отчёт с использованием `OwningDeviceInfoProvider`.
-    let info_provider_1 = OwningDeviceInfoProvider { socket: socket };
+    let info_provider_1 = OwningDeviceInfoProvider {socket};
 
     let report1 = house.create_report(info_provider_1);
 

@@ -75,13 +75,13 @@ mod tests {
     #[test]
     fn default_socket() {
         let socket = Device::SmartSocket(SmartSocket::default("Smart Socket".to_string()));
-        assert_eq!(socket.device_name().is_some(), true);
+        assert!(socket.device_name().is_some());
     }
 
     #[test]
     fn default_thermo() {
         let thermo =
             Device::SmartThermometr(SmartThermometer::default("Smart thermometr".to_string()));
-        assert_eq!(thermo.device_name().is_some(), true);
+        assert!(thermo.device_name().is_some());
     }
 }

@@ -10,7 +10,7 @@ pub struct SmartHouse {
 
 impl Display for SmartHouse {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "House name: {}\n", &self.house_name)
+        writeln!(f, "House name: {}\n", &self.house_name)
     }
 }
 
@@ -183,7 +183,7 @@ mod tests {
         );
         let mut house = SmartHouse::new("House".to_string());
         house.smart_rooms.insert("Kitchen".to_string(), kitchen);
-        let info_provider_1 = OwningDeviceInfoProvider { socket: socket };
+        let info_provider_1 = OwningDeviceInfoProvider {socket};
 
         let info_provider_2 = BorrowingDeviceInfoProvider {
             socket: &socket_borrow,
