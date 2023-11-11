@@ -11,36 +11,21 @@ fn main() {
     //Инициализация комнат
 
     let mut kitchen = SmartRoom::default("Kitchen".to_string());
-    kitchen.smart_device.insert(
-        "Kitchen thermo".to_string(),
-        Device::SmartThermometr(thermo.clone()),
-    );
+    kitchen.add_smart_device(Device::SmartSocket(socket.clone()));
     let mut hall = SmartRoom::default("Hall".to_string());
-    hall.smart_device.insert(
-        "Hall socket".to_string(),
-        Device::SmartSocket(socket.clone()),
-    );
+    hall.add_smart_device(Device::SmartSocket(socket.clone()));
     let mut bathroom = SmartRoom::default("Bathroom".to_string());
-    bathroom.smart_device.insert(
-        "Bathroom thermo".to_string(),
-        Device::SmartThermometr(thermo.clone()),
-    );
+    bathroom.add_smart_device(Device::SmartThermometr(thermo.clone()));
     let mut living = SmartRoom::default("Living room".to_string());
-    living.smart_device.insert(
-        "Living thermo".to_string(),
-        Device::SmartThermometr(thermo.clone()),
-    );
-    living.smart_device.insert(
-        "Living socket".to_string(),
-        Device::SmartSocket(socket.clone()),
-    );
+    living.add_smart_device(Device::SmartThermometr(thermo.clone()));
+    living.add_smart_device(Device::SmartThermometr(thermo.clone()));
     // Инициализация дома
+
     let mut house = SmartHouse::new("House".to_string());
-    house.smart_rooms.insert("Kitchen ".to_string(), kitchen);
-    house.smart_rooms.insert("Hall ".to_string(), hall);
-    house.smart_rooms.insert("Bathroom ".to_string(), bathroom);
-    house.smart_rooms.insert("Livingroom ".to_string(), living);
-    
+    house.add_smart_room(kitchen);
+    house.add_smart_room(bathroom);
+    house.add_smart_room(living);
+    house.add_smart_room(hall.clone());
 
     // Строим отчёт с использованием `OwningDeviceInfoProvider`.
     let info_provider_1 = OwningDeviceInfoProvider {socket};
@@ -48,6 +33,7 @@ fn main() {
     let report1 = house.create_report(info_provider_1);
 
     // Строим отчёт с использованием `BorrowingDeviceInfoProvider`.
+    house.remove_smart_room(hall);
     let info_provider_2 = BorrowingDeviceInfoProvider {
         socket: &socket_borrow,
         thermo: &thermo,

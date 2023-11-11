@@ -54,7 +54,7 @@ mod tests {
     #[test]
     fn delite_device() {
         let mut smart_room = SmartRoom::default("kitchen".to_string());
-        let soket = Device::SmartSocket(SmartSocket::default("soket".to_string()));
+        let soket = Device::SmartSocket(SmartSocket::default("socket".to_string()));
         smart_room.add_smart_device(soket.clone());
         assert!(!smart_room.smart_device.is_empty());
         smart_room.delite_device(soket);
