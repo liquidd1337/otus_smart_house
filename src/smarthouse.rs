@@ -73,7 +73,7 @@ pub struct BorrowingDeviceInfoProvider<'a, 'b> {
 
 impl DeviceInfoProvider for OwningDeviceInfoProvider {
     fn device_info(&self, room: &SmartRoom, devices: &Device) -> String {
-        let mut device_info = format!("{}", room.room_name);
+        let mut device_info = room.room_name.to_string();
         match devices {
             Device::SmartSocket(soket) => device_info.push_str(format!("{}", soket).as_str()),
             Device::SmartThermometr(thermo) => device_info.push_str(format!("{}", thermo).as_str()),
@@ -83,7 +83,7 @@ impl DeviceInfoProvider for OwningDeviceInfoProvider {
 }
 impl<'a, 'b> DeviceInfoProvider for BorrowingDeviceInfoProvider<'a, 'b> {
     fn device_info(&self, room: &SmartRoom, devices: &Device) -> String {
-        let mut device_info = format!("{}", room.room_name);
+        let mut device_info = room.room_name.to_string();
         match devices {
             Device::SmartSocket(soket) => device_info.push_str(format!("{}\n", soket).as_str()),
             Device::SmartThermometr(thermo) => device_info.push_str(format!("{}\n", thermo).as_str()),
@@ -98,7 +98,7 @@ mod tests {
 
     #[test]
     fn new_house() {
-        let mut house = SmartHouse::new("House".to_string());
+        let house = SmartHouse::new("House".to_string());
         assert_eq!(house.house_name, "House");
     }
 
@@ -111,7 +111,9 @@ mod tests {
         house.add_smart_room(kitchen);
         assert!(!house.smart_rooms.is_empty())
     }
-    fn remove_smart_room() {
+
+    #[test]
+    fn delite_smart_room() {
         let socket = SmartSocket::default("Smart_socket".to_string());
         let mut kitchen = SmartRoom::default("Kitchen".to_string());
         kitchen.add_smart_device(Device::SmartSocket(socket.clone()));

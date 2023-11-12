@@ -56,6 +56,7 @@ impl SmartThermometer {
             temperature: 0.0,
         }
     }
+
 }
 
 impl Display for SmartThermometer {

@@ -39,7 +39,7 @@ mod tests {
 
     #[test]
     fn default_room() {
-        let mut smart_room = SmartRoom::default("kitchen".to_string());
+        let smart_room = SmartRoom::default("kitchen".to_string());
         assert!(!smart_room.room_name.is_empty());
     }
 
