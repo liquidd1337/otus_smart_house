@@ -1,4 +1,5 @@
 use crate::devices::*;
+
 use std::{collections::HashMap, fmt::Display};
 #[derive(Debug, Clone)]
 pub struct SmartRoom {
