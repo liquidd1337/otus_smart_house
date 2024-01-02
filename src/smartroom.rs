@@ -1,5 +1,4 @@
 use thiserror::Error;
-
 use crate::devices::*;
 use std::{collections::HashMap, fmt::Display};
 
@@ -21,6 +20,13 @@ impl SmartRoom {
         SmartRoom {
             room_name,
             smart_device: HashMap::new(),
+        }
+    }
+    pub fn get_room_name (&self) -> Result<String, SmartRoomError> {
+        match self.room_name.is_empty() {
+            true => Err(SmartRoomError::DeleteDeviceError("The room name is empty".to_string())),
+            false => Ok(self.room_name.clone()),
+            
         }
     }
 
@@ -63,7 +69,6 @@ mod tests {
     fn add_smart_device() {
         let mut smart_room = SmartRoom::default("kitchen".to_string());
         let soket = Device::SmartSocket(SmartSocket::default("soket".to_string()));
-        #[allow(dead_code)]
         smart_room.add_smart_device(soket);
         assert!(!smart_room.smart_device.is_empty());
     }
@@ -72,7 +77,6 @@ mod tests {
     fn delite_device() {
         let mut smart_room = SmartRoom::default("kitchen".to_string());
         let soket = Device::SmartSocket(SmartSocket::default("socket".to_string()));
-        #[allow(dead_code)]
         smart_room.add_smart_device(soket.clone());
         assert!(!smart_room.smart_device.is_empty());
         smart_room.delite_device(soket);

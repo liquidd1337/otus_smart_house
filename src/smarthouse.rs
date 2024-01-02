@@ -1,8 +1,17 @@
+use thiserror::Error;
 use crate::devices::*;
 use crate::smartroom::*;
 use std::collections::HashMap;
 use std::fmt::Display;
-#[derive(Debug, Clone)]
+
+#[derive(Debug, Error)]
+pub enum SmartHouseError {
+    #[error("Error while adding smart room")]
+    AddRoomError(String),
+    #[error("Error while removing smart room")]
+    RemoveRoomError(String),
+}
+#[derive(Debug, Clone, Error)]
 pub struct SmartHouse {
     house_name: String,
     pub smart_rooms: HashMap<String, SmartRoom>,
@@ -36,12 +45,23 @@ impl SmartHouse {
         }
     }
 
-    pub fn add_smart_room(&mut self, room: SmartRoom) {
-        self.smart_rooms.insert(room.room_name.clone(), room);
+    pub fn add_smart_room(&mut self, room: SmartRoom) -> Result<(), SmartHouseError> {
+        if let Ok(room_name) = room.get_room_name() {
+        self.smart_rooms.insert(room.get_room_name().unwrap(), room);
+        Ok(())
+        } else {
+            Err(SmartHouseError::AddRoomError("Invalid room name".to_string()))
+        }
     }
 
-    pub fn remove_smart_room(&mut self, room: SmartRoom) {
-        self.smart_rooms.remove(&room.room_name);
+    pub fn remove_smart_room(&mut self, room: SmartRoom) -> Result<(), SmartHouseError> {
+        if let Ok(room_name) = room.get_room_name() {
+            self.smart_rooms.remove(&room.room_name);
+            Ok(())
+        } else {
+            Err(SmartHouseError::RemoveRoomError("There is no such room".to_string()))
+        }
+        
     }
 
     pub fn create_report(&self, provider: impl DeviceInfoProvider) -> String {
