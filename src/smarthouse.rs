@@ -46,7 +46,7 @@ impl SmartHouse {
     }
 
     pub fn add_smart_room(&mut self, room: SmartRoom) -> Result<(), SmartHouseError> {
-        if let Ok(room_name) = room.get_room_name() {
+        if let Ok(_room_name) = room.get_room_name() {
         self.smart_rooms.insert(room.get_room_name().unwrap(), room);
         Ok(())
         } else {
@@ -55,7 +55,7 @@ impl SmartHouse {
     }
 
     pub fn remove_smart_room(&mut self, room: SmartRoom) -> Result<(), SmartHouseError> {
-        if let Ok(room_name) = room.get_room_name() {
+        if let Ok(_room_name) = room.get_room_name() {
             self.smart_rooms.remove(&room.room_name);
             Ok(())
         } else {
@@ -126,9 +126,9 @@ mod tests {
     fn add_smart_room() {
         let socket = SmartSocket::default("Smart_socket".to_string());
         let mut kitchen = SmartRoom::default("Kitchen".to_string());
-        kitchen.add_smart_device(Device::SmartSocket(socket.clone()));
+        kitchen.add_smart_device(Device::SmartSocket(socket.clone())).unwrap();
         let mut house = SmartHouse::new("House".to_string());
-        house.add_smart_room(kitchen);
+        house.add_smart_room(kitchen).unwrap();
         assert!(!house.smart_rooms.is_empty())
     }
 
@@ -136,11 +136,11 @@ mod tests {
     fn delite_smart_room() {
         let socket = SmartSocket::default("Smart_socket".to_string());
         let mut kitchen = SmartRoom::default("Kitchen".to_string());
-        kitchen.add_smart_device(Device::SmartSocket(socket.clone()));
+        kitchen.add_smart_device(Device::SmartSocket(socket.clone())).unwrap();
         let mut house = SmartHouse::new("House".to_string());
-        house.add_smart_room(kitchen.clone());
+        house.add_smart_room(kitchen.clone()).unwrap();
         assert!(!house.smart_rooms.is_empty());
-        house.remove_smart_room(kitchen);
+        house.remove_smart_room(kitchen).unwrap();
         assert!(house.smart_rooms.is_empty());
     }
 
@@ -149,20 +149,20 @@ mod tests {
         let socket = SmartSocket::default("Smart_socket".to_string());
         let thermo = SmartThermometer::default("Smart_thetmometr".to_string());
         let mut kitchen = SmartRoom::default("Kitchen".to_string());
-        kitchen.add_smart_device(Device::SmartSocket(socket.clone()));
+        kitchen.add_smart_device(Device::SmartSocket(socket.clone())).unwrap();
         let mut hall = SmartRoom::default("Hall".to_string());
-        hall.add_smart_device(Device::SmartSocket(socket.clone()));
+        hall.add_smart_device(Device::SmartSocket(socket.clone())).unwrap();
         let mut bathroom = SmartRoom::default("Bathroom".to_string());
-        bathroom.add_smart_device(Device::SmartThermometr(thermo.clone()));
+        bathroom.add_smart_device(Device::SmartThermometr(thermo.clone())).unwrap();
         let mut living = SmartRoom::default("Living room".to_string());
-        living.add_smart_device(Device::SmartSocket(socket.clone()));
-        living.add_smart_device(Device::SmartThermometr(thermo.clone()));
+        living.add_smart_device(Device::SmartSocket(socket.clone())).unwrap();
+        living.add_smart_device(Device::SmartThermometr(thermo.clone())).unwrap();
 
         let mut house = SmartHouse::new("House".to_string());
 
-        house.add_smart_room(kitchen);
-        house.add_smart_room(bathroom);
-        house.add_smart_room(living);
+        house.add_smart_room(kitchen).unwrap();
+        house.add_smart_room(bathroom).unwrap();
+        house.add_smart_room(living).unwrap();
         assert!(!house.get_rooms().is_empty())
     }
 
@@ -173,21 +173,21 @@ mod tests {
         let thermo = SmartThermometer::default("Smart_thetmometr".to_string());
         let socket_borrow = SmartSocket::default("Smart_socket".to_string());
         let mut kitchen = SmartRoom::default("Kitchen".to_string());
-        kitchen.add_smart_device(Device::SmartSocket(socket.clone()));
+        kitchen.add_smart_device(Device::SmartSocket(socket.clone())).unwrap();
         let mut hall = SmartRoom::default("Hall".to_string());
-        hall.add_smart_device(Device::SmartSocket(socket.clone()));
+        hall.add_smart_device(Device::SmartSocket(socket.clone())).unwrap();
         let mut bathroom = SmartRoom::default("Bathroom".to_string());
-        bathroom.add_smart_device(Device::SmartThermometr(thermo.clone()));
+        bathroom.add_smart_device(Device::SmartThermometr(thermo.clone())).unwrap();
         let mut living = SmartRoom::default("Living room".to_string());
-        living.add_smart_device(Device::SmartThermometr(thermo.clone()));
-        living.add_smart_device(Device::SmartThermometr(thermo.clone()));
+        living.add_smart_device(Device::SmartThermometr(thermo.clone())).unwrap();
+        living.add_smart_device(Device::SmartThermometr(thermo.clone())).unwrap();
 
 
         let mut house = SmartHouse::new("House".to_string());
 
-        house.add_smart_room(kitchen);
-        house.add_smart_room(bathroom);
-        house.add_smart_room(living);
+        house.add_smart_room(kitchen).unwrap();
+        house.add_smart_room(bathroom).unwrap();
+        house.add_smart_room(living).unwrap();
 
         let info_provider_1 = OwningDeviceInfoProvider {socket};
 
