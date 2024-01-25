@@ -3,15 +3,16 @@ use crate::devices::*;
 use crate::smartroom::*;
 use std::collections::HashMap;
 use std::fmt::Display;
+use serde::{Serialize, Deserialize};
 
-#[derive(Debug, Error)]
+#[derive(Debug, Error, Serialize, Deserialize)]
 pub enum SmartHouseError {
     #[error("Error while adding smart room")]
     AddRoomError(String),
     #[error("Error while removing smart room")]
     RemoveRoomError(String),
 }
-#[derive(Debug, Clone, Error)]
+#[derive(Debug, Clone, Error, Serialize, Deserialize)]
 pub struct SmartHouse {
     house_name: String,
     pub smart_rooms: HashMap<String, SmartRoom>,
@@ -31,12 +32,16 @@ impl SmartHouse {
         }
     }
 
-    pub fn get_rooms(&self) -> Vec<&SmartRoom> {
+    pub fn get_rooms_list(&self) -> Vec<&SmartRoom> {
         self.smart_rooms.values().collect()
     }
 
-    pub fn device_info(&self, room: String) -> Option<Vec<&Device>> {
-        match self.smart_rooms.get(&room) {
+    pub fn get_room(&self, room: &SmartRoom) -> Option<&SmartRoom> {
+        self.smart_rooms.get(room.room_name.as_str())
+    }
+
+    pub fn device_info(&self, room: &String) -> Option<Vec<&Device>> {
+        match self.smart_rooms.get(room) {
             Some(room) => {
                 let device_info = room.smart_device.values().collect();
                 Some(device_info)
@@ -45,16 +50,16 @@ impl SmartHouse {
         }
     }
 
-    pub fn add_smart_room(&mut self, room: SmartRoom) -> Result<(), SmartHouseError> {
+    pub fn add_smart_room(&mut self, room: &SmartRoom) -> Result<(), SmartHouseError> {
         if let Ok(_room_name) = room.get_room_name() {
-        self.smart_rooms.insert(room.get_room_name().unwrap(), room);
+        self.smart_rooms.insert(room.get_room_name().unwrap(), room.clone());
         Ok(())
         } else {
             Err(SmartHouseError::AddRoomError("Invalid room name".to_string()))
         }
     }
 
-    pub fn remove_smart_room(&mut self, room: SmartRoom) -> Result<(), SmartHouseError> {
+    pub fn remove_smart_room(&mut self, room: &SmartRoom) -> Result<(), SmartHouseError> {
         if let Ok(_room_name) = room.get_room_name() {
             self.smart_rooms.remove(&room.room_name);
             Ok(())
@@ -67,7 +72,7 @@ impl SmartHouse {
     pub fn create_report(&self, provider: impl DeviceInfoProvider) -> String {
         let mut report = String::new();
         report.push_str(&format!("{}", self));
-        for smart_rooms in self.get_rooms() {
+        for smart_rooms in self.get_rooms_list() {
             report.push_str(&format!("{} contains:\n", smart_rooms));
             for devices in smart_rooms.smart_device.values() {
                 report.push_str(&format!("{}\n", provider.device_info(smart_rooms, devices)));
@@ -128,7 +133,7 @@ mod tests {
         let mut kitchen = SmartRoom::default("Kitchen".to_string());
         kitchen.add_smart_device(Device::SmartSocket(socket.clone())).unwrap();
         let mut house = SmartHouse::new("House".to_string());
-        house.add_smart_room(kitchen).unwrap();
+        house.add_smart_room(&kitchen).unwrap();
         assert!(!house.smart_rooms.is_empty())
     }
 
@@ -138,9 +143,9 @@ mod tests {
         let mut kitchen = SmartRoom::default("Kitchen".to_string());
         kitchen.add_smart_device(Device::SmartSocket(socket.clone())).unwrap();
         let mut house = SmartHouse::new("House".to_string());
-        house.add_smart_room(kitchen.clone()).unwrap();
+        house.add_smart_room(&kitchen.clone()).unwrap();
         assert!(!house.smart_rooms.is_empty());
-        house.remove_smart_room(kitchen).unwrap();
+        house.remove_smart_room(&kitchen).unwrap();
         assert!(house.smart_rooms.is_empty());
     }
 
@@ -160,10 +165,10 @@ mod tests {
 
         let mut house = SmartHouse::new("House".to_string());
 
-        house.add_smart_room(kitchen).unwrap();
-        house.add_smart_room(bathroom).unwrap();
-        house.add_smart_room(living).unwrap();
-        assert!(!house.get_rooms().is_empty())
+        house.add_smart_room(&kitchen).unwrap();
+        house.add_smart_room(&bathroom).unwrap();
+        house.add_smart_room(&living).unwrap();
+        assert!(!house.get_rooms_list().is_empty())
     }
 
     #[test]
@@ -185,9 +190,9 @@ mod tests {
 
         let mut house = SmartHouse::new("House".to_string());
 
-        house.add_smart_room(kitchen).unwrap();
-        house.add_smart_room(bathroom).unwrap();
-        house.add_smart_room(living).unwrap();
+        house.add_smart_room(&kitchen).unwrap();
+        house.add_smart_room(&bathroom).unwrap();
+        house.add_smart_room(&living).unwrap();
 
         let info_provider_1 = OwningDeviceInfoProvider {socket};
 

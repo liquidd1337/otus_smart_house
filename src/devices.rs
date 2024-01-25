@@ -1,13 +1,14 @@
 use std::fmt::Display;
 use thiserror::Error;
+use serde::{Serialize, Deserialize};
 
-#[derive(Error, Debug)]
+#[derive(Error, Debug, Serialize, Deserialize)]
 pub enum DeviceError {
     #[error("The device doesn't have a name")]
     DeviceNotName(String),
 }
 
-#[derive(Debug, Clone, Error)]
+#[derive(Debug, Clone, Error, Serialize, Deserialize)]
 pub enum Device {
     SmartSocket(SmartSocket),
     SmartThermometr(SmartThermometer),
@@ -31,7 +32,7 @@ impl std::fmt::Display for Device {
 }
 
 #[allow(dead_code)]
-#[derive(Debug, Clone, Error)]
+#[derive(Debug, Clone, Error, Serialize, Deserialize)]
 pub struct SmartSocket {
     pub name: String,
     status: bool,
@@ -57,7 +58,7 @@ impl Display for SmartSocket {
     }
 }
 #[allow(dead_code)]
-#[derive(Debug, Clone, Error)]
+#[derive(Debug, Clone, Error, Serialize, Deserialize)]
 pub struct SmartThermometer {
     pub name: String,
     status: bool,

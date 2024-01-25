@@ -1,6 +1,6 @@
-use smarthouse::devices::*;
-use smarthouse::smarthouse::*;
-use smarthouse::smartroom::*;
+use smarthouse_web::devices::*;
+use smarthouse_web::smarthouse::*;
+use smarthouse_web::smartroom::*;
 
 fn main() {
     // Инициализация устройств
@@ -22,10 +22,10 @@ fn main() {
     // Инициализация дома
 
     let mut house = SmartHouse::new("House".to_string());
-    house.add_smart_room(kitchen).unwrap();
-    house.add_smart_room(bathroom).unwrap();
-    house.add_smart_room(living).unwrap();
-    house.add_smart_room(hall.clone()).unwrap();
+    house.add_smart_room(&kitchen).unwrap();
+    house.add_smart_room(&bathroom).unwrap();
+    house.add_smart_room(&living).unwrap();
+    house.add_smart_room(&hall.clone()).unwrap();
 
     // Строим отчёт с использованием `OwningDeviceInfoProvider`.
     let info_provider_1 = OwningDeviceInfoProvider {socket};
@@ -33,7 +33,7 @@ fn main() {
     let report1 = house.create_report(info_provider_1);
 
     // Строим отчёт с использованием `BorrowingDeviceInfoProvider`.
-    house.remove_smart_room(hall).unwrap();
+    house.remove_smart_room(&hall).unwrap();
     let info_provider_2 = BorrowingDeviceInfoProvider {
         socket: &socket_borrow,
         thermo: &thermo,

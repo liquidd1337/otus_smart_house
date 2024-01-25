@@ -1,15 +1,16 @@
 use thiserror::Error;
 use crate::devices::*;
 use std::{collections::HashMap, fmt::Display};
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Error)]
+#[derive(Debug, Error, Serialize, Deserialize)]
 pub enum SmartRoomError {
     #[error("Error while adding device: {0}")]
     AddDeviceError(#[from] DeviceError),
     #[error("Error while deleting device")]
     DeleteDeviceError(String),
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SmartRoom {
     pub room_name: String,
     pub smart_device: HashMap<String, Device>,
@@ -38,13 +39,17 @@ impl SmartRoom {
         }
     }
 
-    pub fn delite_device(&mut self, smart_device: Device) -> Result<(), SmartRoomError> {
+    pub fn delite_device(&mut self, smart_device: &Device) -> Result<(), SmartRoomError> {
         if let Ok(device_name) = smart_device.device_name() {
             self.smart_device.remove(&device_name);
             Ok(())
         } else {
             Err(SmartRoomError::DeleteDeviceError("The device does not exist".to_string()))
         }
+    }
+
+    pub fn get_device(&self, device_name: String) -> Option<&Device> {
+        self.smart_device.get(&device_name).clone()
     }
 }
 
@@ -78,7 +83,7 @@ mod tests {
         let soket = Device::SmartSocket(SmartSocket::default("socket".to_string()));
         smart_room.add_smart_device(soket.clone()).unwrap();
         assert!(!smart_room.smart_device.is_empty());
-        smart_room.delite_device(soket).unwrap();
+        smart_room.delite_device(&soket).unwrap();
         assert!(smart_room.smart_device.is_empty());
     }
 }
