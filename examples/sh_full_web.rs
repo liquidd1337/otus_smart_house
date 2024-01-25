@@ -241,7 +241,7 @@ async fn create_devices(
     }
 }
 
-#[actix_web::delete("/rooms/{id}/devices/{device_id}")]
+#[actix_web::delete("/rooms/{room_name}/devices/{device_id}")]
 async fn delete_device(
     ctx: web::Data<Context>,
     path: web::Path<(SmartRoom, String)>,
